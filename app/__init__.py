@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
@@ -9,6 +10,7 @@ from config import Config
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
+migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
@@ -18,11 +20,12 @@ def create_app():
     db.init_app(app)  # Initialize the database extension
     bcrypt.init_app(app)  # Initialize Bcrypt
     login_manager.init_app(app)  # Initialize LoginManager
+    migrate.init_app(app, db)
     CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Enable CORS
 
     # Register blueprints
-    from app.auth import auth_bp
-    from app.dashboard import dashboard_bp
+    from app.auth.routes import auth_bp
+    from app.dashboard.routes import dashboard_bp
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(dashboard_bp, url_prefix='/api/dashboard')
 

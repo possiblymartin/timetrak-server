@@ -25,6 +25,7 @@ class User(db.Model, UserMixin):
 class Attendance(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+  attendance_date = db.Column(db.Date, nullable=False)
   clock_in_time = db.Column(db.DateTime, nullable=False)
   clock_out_time = db.Column(db.DateTime, nullable=True)
   location = db.Column(db.String(100), nullable=False)
